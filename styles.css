@@ -1,0 +1,47 @@
+
+body{
+	display: flex;
+	flex-direction: column;
+	min-height: 100%;
+}
+
+.container{
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	margin-top: 0px;
+	padding-top: 5px;
+	padding-bottom: 30px;
+}
+
+.all{
+	width: 100%;
+}
+
+.half{
+	width: 50%;
+}
+
+.quarter{
+	width: 25%;
+}
+
+.third{
+	width: 33.3333%;
+}
+
+.three-quarter{
+	width: 75%
+}
+
+.text-right{
+	text-align: right;
+}
+
+.text-center{
+	text-align: center;
+}
+
+
+
+
