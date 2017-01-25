@@ -14,13 +14,14 @@
 <body class="container">
 	<h2 class="all">Resturants</h2>
 	<div>
-		<div id="list" class="quarter">List</div>
+		<div id="list" class="half">List</div>
 		<input  data-bind='value: placeName'>
 		<span data-bind='text: placeName'></span>
 
-		<ul data-bind='foreach: pins'>
+		<ul class="half" data-bind='foreach: pins'>
 			<li data-bind='text: name'></li>
 		</ul>
+		
 	</div>
 	
 	<div id="map" class="three-quarter"></div>
