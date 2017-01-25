@@ -1,5 +1,5 @@
-var pins = ko.observableArray();
-// var pins = []
+
+var pins = []
 var $body = $('body');
 
 
@@ -22,15 +22,6 @@ function initMap() {
 
 function yelp(data){
     console.log(data);
-    // var rList = data.businesses
-    // var lat = rList[4].location.coordinate.latitude
-    // var long = rList[4].location.coordinate.longitude
-    // console.log('lat: '+lat);
-    // var marker = new google.maps.Marker({
-    //     position: {lat: lat, lng: long},
-    // });
-    // marker.setMap(map);
-    console.log(data.businesses.length);
     for(var i=0;i<data.businesses.length;i++){
         var lat = data.businesses[i].location.coordinate.latitude;
         var long = data.businesses[i].location.coordinate.longitude;
@@ -39,10 +30,8 @@ function yelp(data){
             location: loc
         };
         pins.push(location);
-        console.log('pushed item');
     }
-    console.log(pins());
-    $body.append('<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDvOpXVTSzCjsIxg96PG9txSxQoI1ObAg&callback=initMap"></script>');
+    console.log(pins);
 }
 
 var auth = {
