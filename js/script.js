@@ -1,8 +1,16 @@
 
-var pins = []
-var $body = $('body');
+var pins = ko.observableArray();
+
+var placeName = ko.observable("Bert");
 
 
+
+function pin(name,lat,long){
+    var self = this;
+    self.name = name;
+    self.lat = lat;
+    self.long = long;
+}
 
 function initMap() {
     console.log('method ran');
@@ -20,18 +28,18 @@ function initMap() {
     
 }
 
-function yelp(data){
+function yelpCallBack(data){
     console.log(data);
     for(var i=0;i<data.businesses.length;i++){
+        var name = data.businesses[i].name;
         var lat = data.businesses[i].location.coordinate.latitude;
         var long = data.businesses[i].location.coordinate.longitude;
-        var loc = {lat: lat, lng: long};
-        var location = {
-            location: loc
-        };
-        pins.push(location);
+        console.log(new pin(name,lat,long));
+        pins.push(new pin(name,lat,long));
     }
-    console.log(pins);
+    console.log('here are the pins');
+    console.log(pins());
+    
 }
 
 var auth = {
@@ -55,7 +63,7 @@ var accessor = {
 var parameters = [];
 parameters.push(['term',searchTerm]);
 parameters.push(['location', near]);
-parameters.push(['callback', 'yelp']);
+parameters.push(['callback', 'yelpCallBack']);
 parameters.push(['oauth_consumer_key', auth.consumerKey]);
 parameters.push(['oauth_consumer_secret', auth.consumerSecret]);
 parameters.push(['oauth_token', auth.accessToken]);
@@ -76,7 +84,7 @@ $.ajax({
     'url' : message.action,
     'data' : parameterMap,
     'dataType' : 'jsonp',
-    'jsonpCallback' : 'yelp',
+    'jsonpCallback' : 'yelpCallBack',
     'cache': true
 })
 .done(function(data, textStatus, jqXHR) {
@@ -85,3 +93,6 @@ $.ajax({
 .fail(function(jqXHR, textStatus, errorThrown) {
     console.log('error[' + errorThrown + '], status[' + textStatus + '], jqXHR[' + JSON.stringify(jqXHR) + ']');
 });
+
+
+ko.applyBindings();

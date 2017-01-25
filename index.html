@@ -3,22 +3,31 @@
 <head>
 	<title>Map Project</title>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script type="text/javascript" src="https://raw.githubusercontent.com/rmxdave/phnx/master/lib/OAuth/OAuth.js"></script>
-    <script type="text/javascript" src="https://raw.githubusercontent.com/rmxdave/phnx/master/lib/OAuth/SHA1.js"></script>
+    <script type="text/javascript" src="js/OAuth.js"></script>
+    <script type="text/javascript" src="js/OAuth-SHA1.js"></script>
     <script type="text/javascript" src="js/knockout-3.4.1.js"></script>
-	<script type="text/javascript" src="js/script.js"></script>
+	
 	
 	
 	<link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body class="container">
 	<h2 class="all">Resturants</h2>
-	<div id="list" class="quarter">List</div>
-	<div id="map" data-bind='value: pins' class="three-quarter"></div>
+	<div>
+		<div id="list" class="quarter">List</div>
+		<input  data-bind='value: placeName'>
+		<span data-bind='text: placeName'></span>
 
+		<ul data-bind='foreach: pins'>
+			<li data-bind='text: name'></li>
+		</ul>
+	</div>
+	
+	<div id="map" class="three-quarter"></div>
+	<script type="text/javascript" src="js/script.js"></script>
 	<script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDvOpXVTSzCjsIxg96PG9txSxQoI1ObAg&callback=initMap">
     </script>
-
+	
 </body>
 </html>
