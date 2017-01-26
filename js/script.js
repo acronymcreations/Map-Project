@@ -57,13 +57,14 @@ function infoWindowString(pin){
 function yelpCallBack(data){
     console.log(data);
     for(var i=0;i<data.businesses.length;i++){
-        var name = data.businesses[i].name;
-        var lat = data.businesses[i].location.coordinate.latitude;
-        var long = data.businesses[i].location.coordinate.longitude;
-        var image = data.businesses[i].image_url;
-        var url = data.businesses[i].mobile_url;
-        var rating_img = data.businesses[i].rating_img_url;
-        var snip = data.businesses[i].snippet_text;
+        var item = data.businesses[i];
+        var name = item.name;
+        var lat = item.location.coordinate.latitude;
+        var long = item.location.coordinate.longitude;
+        var image = item.image_url;
+        var url = item.mobile_url;
+        var rating_img = item.rating_img_url;
+        var snip = item.snippet_text;
         pins.push(new pin(name,lat,long,image,url,rating_img,snip));
     }
     initMap();
