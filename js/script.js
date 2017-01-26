@@ -1,27 +1,25 @@
 
 var pins = ko.observableArray();
 
-var placeName = ko.observable("Bert");
+var placeName = ko.observable("food");
 
-function pin(name,lat,long){
+function pin(name,lat,long,image,url,rating_img,snip){
     var self = this;
     self.name = name;
     self.lat = lat;
     self.long = long;
+    self.image = image;
+    self.url = url;
+    self.rating_img = rating_img;
+    self.snip = snip;
 }
 
 function initMap() {
-    console.log('method ran');
     var sedonaLoaction = {lat: 34.869445, lng: -111.761493};
     var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 14,
         center: sedonaLoaction
     });
-    var marker = new google.maps.Marker({
-        position: sedonaLoaction,
-        map: map
-    });
-    console.log("start of forloop");
     console.log(pins().length);
     for(var i=0;i<pins().length;i++){
         var lati = pins()[i].lat;
@@ -34,14 +32,26 @@ function initMap() {
             optimized: false,
             animation: google.maps.Animation.DROP
         });
-        marker.addListener('click',pinClicked);
+        marker.info = new google.maps.InfoWindow({
+            content: infoWindowString(pins()[i]),
+            maxWidth: 120
+        });
+        marker.addListener('click',function(){
+            console.log(this.title+' clicked');
+            this.info.open(map, this);
+        });
         
     }
     
 }
 
-function pinClicked(pin){
-    console.log('pointer was clicked');
+function infoWindowString(pin){
+    var html = ' \
+    <img src='+pin.image+' width="30"> \
+    <a href='+pin.url+'><strong>'+pin.name+'</strong></a> \
+    <img src='+pin.rating_img+'><br> \
+    '+pin.snip;
+    return html;
 }
 
 function yelpCallBack(data){
@@ -50,12 +60,13 @@ function yelpCallBack(data){
         var name = data.businesses[i].name;
         var lat = data.businesses[i].location.coordinate.latitude;
         var long = data.businesses[i].location.coordinate.longitude;
-        pins.push(new pin(name,lat,long));
+        var image = data.businesses[i].image_url;
+        var url = data.businesses[i].mobile_url;
+        var rating_img = data.businesses[i].rating_img_url;
+        var snip = data.businesses[i].snippet_text;
+        pins.push(new pin(name,lat,long,image,url,rating_img,snip));
     }
-    console.log('here are the pins');
-    console.log(pins());
     initMap();
-    
 }
 
 function initYelp(searchTerm){
@@ -112,7 +123,7 @@ function initYelp(searchTerm){
     });
 }
 
-initYelp('coffee');
+initYelp('food');
 
 
 
