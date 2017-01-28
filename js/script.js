@@ -1,7 +1,41 @@
+var vm;
 
-var pins = ko.observableArray();
+var pins = [];
 
-var placeName = ko.observable("food");
+var searchTerm = 'food';
+
+var infoWindow;
+
+//next steps:
+//use computed observable on placeName
+//inside check search term against pins and then use the visable property to filter
+//add visible property to markers
+
+function ViewModel(){
+	var self = this;
+	self.kopins = ko.observableArray(pins);
+
+	self.placeName = ko.observable(' ');
+
+	self.listClick = function(location){
+		console.log(location);
+		google.maps.event.trigger(location.marker,'click');
+	}
+
+	self.filter = ko.computed(function(){
+		for (var i = 0; i < self.kopins().length; i++) {
+			if(self.kopins()[i].name.toLowerCase().includes(self.placeName().toLowerCase()) 
+				|| self.kopins()[i].snip.toLowerCase().includes(self.placeName().toLowerCase())){
+				self.kopins()[i].isVisible(true);
+				self.kopins()[i].marker.visible = true;
+				console.log(self.kopins()[i].name);
+			}else{
+				self.kopins()[i].isVisible(false);
+				self.kopins()[i].marker.visible = false;
+			}
+		}
+	},this);
+}
 
 function pin(name,lat,long,image,url,rating_img,snip){
     var self = this;
@@ -12,43 +46,54 @@ function pin(name,lat,long,image,url,rating_img,snip){
     self.url = url;
     self.rating_img = rating_img;
     self.snip = snip;
+    self.isVisible = ko.observable();
 }
 
 function initMap() {
+	
     var sedonaLoaction = {lat: 34.869445, lng: -111.761493};
     var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 14,
         center: sedonaLoaction
     });
-    console.log(pins().length);
-    for(var i=0;i<pins().length;i++){
-        var lati = pins()[i].lat;
-        var longi = pins()[i].long;
+    console.log(pins.length);
+
+    infoWindow = new google.maps.InfoWindow({
+    	maxWidth: 120
+    });
+    for(var i=0;i<pins.length;i++){
+        var lati = pins[i].lat;
+        var longi = pins[i].long;
         var pinLocation = {lat: lati, lng: longi};
         var marker = new google.maps.Marker({
             position: pinLocation,
             map: map,
-            title: pins()[i].name,
+            title: pins[i].name,
             optimized: false,
-            animation: google.maps.Animation.DROP
-        });
-        marker.info = new google.maps.InfoWindow({
-            content: infoWindowString(pins()[i]),
-            maxWidth: 120
-        });
-        marker.addListener('click',function(){
-            console.log(this.title+' clicked');
-            this.info.open(map, this);
+            animation: google.maps.Animation.DROP,
+            content: infoWindowString(pins[i]),
+            visible: true
         });
         
+        marker.addListener('click',function(){
+            console.log(this.title+' clicked');
+
+            infoWindow.setContent(this.content)
+            infoWindow.open(map, this);
+        });
+        pins[i].marker = marker;
+        
     }
+    vm = new ViewModel();
+
+    ko.applyBindings(vm);
     
 }
 
 function infoWindowString(pin){
     var html = ' \
     <img src='+pin.image+' width="30"> \
-    <a href='+pin.url+'><strong>'+pin.name+'</strong></a> \
+    <a href='+pin.url+'><strong>'+pin.name+'</strong></a><br> \
     <img src='+pin.rating_img+'><br> \
     '+pin.snip;
     return html;
@@ -70,7 +115,7 @@ function yelpCallBack(data){
     initMap();
 }
 
-function initYelp(searchTerm){
+function initYelp(){
     var auth = {
         consumerKey: 'MP8vIWLoeNB-EpuQyz1sZw',
         consumerSecret: 'hHAFwe1_PPdTBjj9xfUNVcIuboQ',
@@ -81,7 +126,6 @@ function initYelp(searchTerm){
         }
     };
 
-    var searchTerm = searchTerm;
     var near = 'sedona';
 
     var accessor = {
@@ -124,8 +168,7 @@ function initYelp(searchTerm){
     });
 }
 
-initYelp('food');
+//initYelp('food');
 
 
 
-ko.applyBindings();

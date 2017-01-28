@@ -12,22 +12,22 @@
 	<link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body class="container">
-	<h2 class="all">Resturants</h2>
+	<h2 class="all">Restaurants</h2>
 	<div>
 		<div id="list" class="half">Search</div>
 		<input  data-bind='value: placeName'>
 		<span data-bind='text: placeName'></span>
 
-		<ul class="half" data-bind='foreach: pins'>
-			<li data-bind='text: name'></li>
+		<ul class="half" data-bind='foreach: kopins'>
+			<li data-bind='visible: isVisible, text: name, click: $root.listClick'></li>
 		</ul>
 		
 	</div>
 	
 	<div id="map" class="three-quarter"></div>
 	<script type="text/javascript" src="js/script.js"></script>
-	<script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDvOpXVTSzCjsIxg96PG9txSxQoI1ObAg&callback=initMap">
+	<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDvOpXVTSzCjsIxg96PG9txSxQoI1ObAg&callback=initYelp">
     </script>
 
 
