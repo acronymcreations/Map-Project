@@ -1,11 +1,7 @@
 var vm;
-
 var pins = [];
-
 var searchTerm = 'food';
-
 var infoWindow;
-
 var map;
 
 function ViewModel(){
@@ -57,7 +53,7 @@ function initMap() {
     console.log(pins.length);
 
     infoWindow = new google.maps.InfoWindow({
-    	maxWidth: 140
+    	maxWidth: 160
     });
     for(var i=0;i<pins.length;i++){
         var lati = pins[i].lat;
@@ -91,13 +87,15 @@ function initMap() {
 }
 
 function infoWindowString(pin){
-    var html = '<img src='+pin.image+' width="30">';
+    var html = '<div class="info-window"';
+    html += '<img src='+pin.image+' width="30">';
     html += '<a href='+pin.url+' target="_blank"><strong>'+pin.name+'</strong></a><br>';
     html += '<img src='+pin.rating_img+'><br>';
     html += pin.snip;
     html += '<br>';
     html += '<a href='+pin.url+' target="_blank">';
     html += '<img src="img/yelp-logo.png" width=40></a>';
+    html += '</div'
  
     return html;
 }
@@ -179,6 +177,13 @@ function newSearch(){
     initYelp(searchTerm);
 }
 
+function openMenu() {
+    document.getElementById("side-menu").style.width = "250px";
+}
+
+function closeMenu() {
+    document.getElementById("side-menu").style.width = "0";
+}
 
 
 

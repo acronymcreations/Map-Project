@@ -12,23 +12,29 @@
 	<link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body class="container">
-	<h2 class="all text-center">Restaurants in Sedona</h2>
-	<div>
-		<div>Search for:</div>
-		<input type="text" id="searchTerm" value="Food">
-		<input type="submit" name="searchButton" value="search" onclick="newSearch();">
-		<div id="list" class="half">Filter:</div>
+	<div class="quarter" onclick="openMenu()"><img class="menu-icon" src="img/menu-icon.png" width="40" height="40"></div>
+	<h1 class="half text-center">Restaurants in Sedona</h1>
+	<div class="quarter"></div>
 
-		<input  data-bind='value: placeName'>
-		<!-- <span data-bind='text: placeName'></span> -->
-
-		<ul class="half" data-bind='foreach: kopins'>
-			<li data-bind='visible: isVisible, text: name, click: $root.listClick'></li>
-		</ul>
+	<div class="side-menu" id="side-menu">
+		<a href="javascript:void(0)" class="close-btn" onclick="closeMenu()">&times;</a>
+		<div class="search-inputs">
+			<!-- <div>Search for:</div> -->
+			<!-- <input type="text" id="searchTerm" value="Food"><br>
+			<input type="submit" name="searchButton" value="search" onclick="newSearch();"> -->
+			<div id="list" class="half">Filter:</div>
+			<input  data-bind='value: placeName'>
+		</div>
 		
+		
+
+		<ul data-bind='foreach: kopins'>
+			<li class="search-results" data-bind='visible: isVisible, text: name, click: $root.listClick'></li>
+		</ul>
 	</div>
 	
-	<div id="map" class="three-quarter"></div>
+	
+	<div id="map" class="all"></div>
 	<script type="text/javascript" src="js/script.js"></script>
 	<script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDvOpXVTSzCjsIxg96PG9txSxQoI1ObAg&callback=initYelp">

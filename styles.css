@@ -11,6 +11,14 @@ html{
 	width: 100%;
 }
 
+ul{
+	margin-bottom: 80px;
+}
+
+h1{
+	margin-bottom: 0px;
+}
+
 .container{
 	display: flex;
 	flex-wrap: wrap;
@@ -48,10 +56,54 @@ html{
 	text-align: center;
 }
 
-#map{
-	height: 90%;
-
+.search-inputs{
+	margin-left: 25px;
 }
 
+.side-menu {
+    height: 100%; 
+    width: 0; 
+    position: fixed; 
+    z-index: 1; 
+    top: 0;
+    left: 0;
+    background-color: lightgrey; 
+    overflow-x: hidden; 
+    padding-top: 30px; 
+    transition: 0.1s; 
+}
 
+.search-results {
+    padding: 8px 8px 8px 8px;
+    /*text-decoration: none;*/
+    font-size: 20px;
+    color: black;
+    display: block;
+    transition: 0.1s
+}
+
+.close-btn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 20px;
+}
+
+.info-window{
+	font-size: 17px;
+}
+
+.menu-icon{
+	margin-top: 21.4px;
+	margin-left: 10px;
+}
+
+#map{
+	height: 80%;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-top: 0px;
+
+}
 
