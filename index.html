@@ -20,9 +20,7 @@
 		<!-- Creates the close menu button -->
 		<a href="javascript:void(0)" class="close-btn" onclick="closeMenu()">&times;</a>
 		<div class="search-inputs">
-			<!-- <div>Search for:</div> -->
-			<!-- <input type="text" id="searchTerm" value="Food"><br>
-			<input type="submit" name="searchButton" value="search" onclick="newSearch();"> -->
+			<!-- Filter box used for filtering the search contents -->
 			<div id="list" class="half">Filter:</div>
 			<input  data-bind='value: placeName'>
 		</div>
@@ -37,12 +35,8 @@
 	<!-- js that actually calls the map and starts the whole process -->
 	<script type="text/javascript" src="js/script.js"></script>
 	<script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDvOpXVTSzCjsIxg96PG9txSxQoI1ObAg&callback=initYelp">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDvOpXVTSzCjsIxg96PG9txSxQoI1ObAg&callback=initYelp" onerror="mapError()">
     </script>
-
-
-    
-
 	
 </body>
 </html>

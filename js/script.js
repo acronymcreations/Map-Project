@@ -216,12 +216,12 @@ function closeMenu() {
     document.getElementById("side-menu").style.width = "0";
 }
 
-// function newSearch(){
-//     console.log('button clicked');
-//     searchTerm = document.getElementById('searchTerm').value;
-//     console.log(searchTerm);
-//     initYelp(searchTerm);
-// }
+function mapError(){
+    console.log('Error with map');
+    errorMessage = 'Map failed to load.  Please try again later.'
+    vm = new ViewModel();
+    ko.applyBindings(vm);
+}
 
 
 

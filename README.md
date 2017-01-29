@@ -18,3 +18,9 @@ pulled directly from Yelp.
 - `js/scripts.js` contains all of the javascript needed to run the page including Google Maps API info and Yelp API info
 
 - `styles.css` contains all of the styling aspects needed to render the page.
+
+## External Resources
+
+- Google Maps API is used to display the map as well as all of the pins placed on the map.
+
+- Yelp API is used for gathering the list of establishments as well as all of their associated data.
