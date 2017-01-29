@@ -6,17 +6,18 @@
     <script type="text/javascript" src="js/OAuth.js"></script>
     <script type="text/javascript" src="js/OAuth-SHA1.js"></script>
     <script type="text/javascript" src="js/knockout-3.4.1.js"></script>
-	
-	
-	
 	<link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body class="container">
+	<!-- Creates the menu button that is used to open the slideout menu -->
 	<div class="quarter" onclick="openMenu()"><img class="menu-icon" src="img/menu-icon.png" width="40" height="40"></div>
 	<h1 class="half text-center">Restaurants in Sedona</h1>
-	<div class="quarter"></div>
-
+	<!-- Space set aside for potential error messages. If no errors occur, space is left empty -->
+	<div class="quarter error-message"><span data-bind='text: errorMessage'></span></div>
+	
+	<!-- Creates the sideout menu -->
 	<div class="side-menu" id="side-menu">
+		<!-- Creates the close menu button -->
 		<a href="javascript:void(0)" class="close-btn" onclick="closeMenu()">&times;</a>
 		<div class="search-inputs">
 			<!-- <div>Search for:</div> -->
@@ -25,16 +26,15 @@
 			<div id="list" class="half">Filter:</div>
 			<input  data-bind='value: placeName'>
 		</div>
-		
-		
-
+		<!-- Knockout code to list out all of the api results -->
 		<ul data-bind='foreach: kopins'>
 			<li class="search-results" data-bind='visible: isVisible, text: name, click: $root.listClick'></li>
 		</ul>
 	</div>
 	
-	
+	<!-- div section to hold the actual map -->
 	<div id="map" class="all"></div>
+	<!-- js that actually calls the map and starts the whole process -->
 	<script type="text/javascript" src="js/script.js"></script>
 	<script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDvOpXVTSzCjsIxg96PG9txSxQoI1ObAg&callback=initYelp">

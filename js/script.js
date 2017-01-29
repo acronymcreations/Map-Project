@@ -1,21 +1,30 @@
+// Global variables
 var vm;
 var pins = [];
 var searchTerm = 'food';
 var infoWindow;
 var map;
+var errorMessage = '';
 
+// View Model section
 function ViewModel(){
-    console.log('vm created');
 	var self = this;
+    // creates the ko array that holds all of the data pins
 	self.kopins = ko.observableArray(pins);
 
+    // observable that monitors filtering of data
 	self.placeName = ko.observable(' ');
 
+    // observable that handles error messages
+    self.errorMessage = ko.observable(errorMessage);
+
+    // Monitors for clicks on the list items in the menu
 	self.listClick = function(location){
 		console.log(location);
 		google.maps.event.trigger(location.marker,'click');
 	}
 
+    // Handles filtering the data whenever 'placeNames' value changes
 	self.filter = ko.computed(function(){
 		for (var i = 0; i < self.kopins().length; i++) {
 			if(self.kopins()[i].name.toLowerCase().includes(self.placeName().toLowerCase()) 
@@ -32,6 +41,7 @@ function ViewModel(){
 	},this);
 }
 
+// Object that holds all data required for one pin in the map.
 function pin(name,lat,long,image,url,rating_img,snip){
     var self = this;
     self.name = name;
@@ -44,21 +54,26 @@ function pin(name,lat,long,image,url,rating_img,snip){
     self.isVisible = ko.observable();
 }
 
+// Function that puts everything on the map together
 function initMap() {
+    // Sets the focus of the map
     var sedonaLoaction = {lat: 34.867445, lng: -111.781493};
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 14,
         center: sedonaLoaction
     });
-    console.log(pins.length);
 
+    // creates the info window that pops up when a marker is clicked on
     infoWindow = new google.maps.InfoWindow({
-    	maxWidth: 160
+    	maxWidth: 180
     });
+
+    // for loop that builds all of the pins that will go on the map
     for(var i=0;i<pins.length;i++){
         var lati = pins[i].lat;
         var longi = pins[i].long;
         var pinLocation = {lat: lati, lng: longi};
+        // creates the marker (pin)
         var marker = new google.maps.Marker({
             position: pinLocation,
             map: map,
@@ -69,23 +84,32 @@ function initMap() {
             visible: true
         });
         
+        // Adds a click listener to each pin that opens the info window and animates the pin
         marker.addListener('click',function(){
             var self = this;
+            // opens the info window
             infoWindow.setContent(self.content);
             infoWindow.open(map, self);
+            // animates the pin with bouncing affect
             self.setAnimation(google.maps.Animation.BOUNCE);
+            // stops the bouncing after 2 seconds
             setTimeout(function() {
                 self.setAnimation(null);
             }, 2000);
         });
+
+        // adds the marker created above to the rest of the pin data
         pins[i].marker = marker;
         
     }
+
+    // creates a new view model and applies the ko bindings
     vm = new ViewModel();
     ko.applyBindings(vm);    
     
 }
 
+// function that builds the html displayed in the info window
 function infoWindowString(pin){
     var html = '<div class="info-window"';
     html += '<img src='+pin.image+' width="30">';
@@ -100,11 +124,9 @@ function infoWindowString(pin){
     return html;
 }
 
-function yelpCallBack(data){
-    console.log(data);
-}
-
+// Yelp API Call
 function initYelp(){
+    // yelp keys for authentication.  Should probably be kept private in production app.
     var auth = {
         consumerKey: 'MP8vIWLoeNB-EpuQyz1sZw',
         consumerSecret: 'hHAFwe1_PPdTBjj9xfUNVcIuboQ',
@@ -114,14 +136,15 @@ function initYelp(){
             signatureMethod: 'HMAC-SHA1'
         }
     };
-
-    var near = 'sedona';
-
     var accessor = {
         consumerSecret: auth.consumerSecret,
         tokenSecret: auth.accessTokenSecret
     };
 
+    // search location
+    var near = 'sedona';
+
+    // paeameters that are sent to yelp for proper ajax call
     var parameters = [];
     parameters.push(['term',searchTerm]);
     parameters.push(['location', near]);
@@ -131,6 +154,7 @@ function initYelp(){
     parameters.push(['oauth_token', auth.accessToken]);
     parameters.push(['oauth_signature_method', 'HMAC-SHA1']); 
 
+    // actual mesage that is sent to yelp, using the above info
     var message = {
         'action' : 'https://api.yelp.com/v2/search',
         'method' : 'GET',
@@ -142,6 +166,7 @@ function initYelp(){
 
     var parameterMap = OAuth.getParameterMap(message.parameters);
         
+    // Actual ajax call
     $.ajax({
         'url' : message.action,
         'data' : parameterMap,
@@ -149,8 +174,11 @@ function initYelp(){
         'jsonpCallback' : 'yelpCallBack',
         'cache': true
     })
+    // On complete method
     .done(function(data, textStatus, jqXHR) {
+        // Clears out any leftover data from pins array
         pins = [];
+        // for loop that parses data from yelp into the pins array
         for(var i=0;i<data.businesses.length;i++){
             var item = data.businesses[i];
             var name = item.name;
@@ -162,28 +190,38 @@ function initYelp(){
             var snip = item.snippet_text;
             pins.push(new pin(name,lat,long,image,url,rating_img,snip));
         }
+        // calls the map method that places all the pins on the map
         initMap();
-        console.log('done');
     })
+    // if the yelp request fails, an error message is displayed
+    // in the top right of screen and then the map is loaded
     .fail(function(jqXHR, textStatus, errorThrown) {
-        console.log('error[' + errorThrown + '], status[' + textStatus + '], jqXHR[' + JSON.stringify(jqXHR) + ']');
+        errorMessage = 'Yelp data failed to load.  Please try again later.'
+        initMap();
     });
 }
 
-function newSearch(){
-    console.log('button clicked');
-    searchTerm = document.getElementById('searchTerm').value;
-    console.log(searchTerm);
-    initYelp(searchTerm);
+// Required callback method called when yelp api finishes
+function yelpCallBack(data){
+    console.log(data);
 }
 
+// Opens the slideout menu
 function openMenu() {
     document.getElementById("side-menu").style.width = "250px";
 }
 
+// closes the slideout menu
 function closeMenu() {
     document.getElementById("side-menu").style.width = "0";
 }
+
+// function newSearch(){
+//     console.log('button clicked');
+//     searchTerm = document.getElementById('searchTerm').value;
+//     console.log(searchTerm);
+//     initYelp(searchTerm);
+// }
 
 
 
