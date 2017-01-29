@@ -6,12 +6,10 @@ var searchTerm = 'food';
 
 var infoWindow;
 
-//next steps:
-//use computed observable on placeName
-//inside check search term against pins and then use the visable property to filter
-//add visible property to markers
+var map;
 
 function ViewModel(){
+    console.log('vm created');
 	var self = this;
 	self.kopins = ko.observableArray(pins);
 
@@ -28,10 +26,11 @@ function ViewModel(){
 				|| self.kopins()[i].snip.toLowerCase().includes(self.placeName().toLowerCase())){
 				self.kopins()[i].isVisible(true);
 				self.kopins()[i].marker.visible = true;
-				console.log(self.kopins()[i].name);
+                self.kopins()[i].marker.setMap(map);
 			}else{
 				self.kopins()[i].isVisible(false);
 				self.kopins()[i].marker.visible = false;
+                self.kopins()[i].marker.setMap(null);
 			}
 		}
 	},this);
@@ -50,16 +49,15 @@ function pin(name,lat,long,image,url,rating_img,snip){
 }
 
 function initMap() {
-	
-    var sedonaLoaction = {lat: 34.869445, lng: -111.761493};
-    var map = new google.maps.Map(document.getElementById('map'), {
+    var sedonaLoaction = {lat: 34.867445, lng: -111.781493};
+    map = new google.maps.Map(document.getElementById('map'), {
         zoom: 14,
         center: sedonaLoaction
     });
     console.log(pins.length);
 
     infoWindow = new google.maps.InfoWindow({
-    	maxWidth: 120
+    	maxWidth: 140
     });
     for(var i=0;i<pins.length;i++){
         var lati = pins[i].lat;
@@ -76,43 +74,36 @@ function initMap() {
         });
         
         marker.addListener('click',function(){
-            console.log(this.title+' clicked');
-
-            infoWindow.setContent(this.content)
-            infoWindow.open(map, this);
+            var self = this;
+            infoWindow.setContent(self.content);
+            infoWindow.open(map, self);
+            self.setAnimation(google.maps.Animation.BOUNCE);
+            setTimeout(function() {
+                self.setAnimation(null);
+            }, 2000);
         });
         pins[i].marker = marker;
         
     }
     vm = new ViewModel();
-
-    ko.applyBindings(vm);
+    ko.applyBindings(vm);    
     
 }
 
 function infoWindowString(pin){
-    var html = ' \
-    <img src='+pin.image+' width="30"> \
-    <a href='+pin.url+'><strong>'+pin.name+'</strong></a><br> \
-    <img src='+pin.rating_img+'><br> \
-    '+pin.snip;
+    var html = '<img src='+pin.image+' width="30">';
+    html += '<a href='+pin.url+' target="_blank"><strong>'+pin.name+'</strong></a><br>';
+    html += '<img src='+pin.rating_img+'><br>';
+    html += pin.snip;
+    html += '<br>';
+    html += '<a href='+pin.url+' target="_blank">';
+    html += '<img src="img/yelp-logo.png" width=40></a>';
+ 
     return html;
 }
 
 function yelpCallBack(data){
     console.log(data);
-    for(var i=0;i<data.businesses.length;i++){
-        var item = data.businesses[i];
-        var name = item.name;
-        var lat = item.location.coordinate.latitude;
-        var long = item.location.coordinate.longitude;
-        var image = item.image_url;
-        var url = item.mobile_url;
-        var rating_img = item.rating_img_url;
-        var snip = item.snippet_text;
-        pins.push(new pin(name,lat,long,image,url,rating_img,snip));
-    }
-    initMap();
 }
 
 function initYelp(){
@@ -161,6 +152,19 @@ function initYelp(){
         'cache': true
     })
     .done(function(data, textStatus, jqXHR) {
+        pins = [];
+        for(var i=0;i<data.businesses.length;i++){
+            var item = data.businesses[i];
+            var name = item.name;
+            var lat = item.location.coordinate.latitude;
+            var long = item.location.coordinate.longitude;
+            var image = item.image_url;
+            var url = item.mobile_url;
+            var rating_img = item.rating_img_url;
+            var snip = item.snippet_text;
+            pins.push(new pin(name,lat,long,image,url,rating_img,snip));
+        }
+        initMap();
         console.log('done');
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
@@ -168,7 +172,27 @@ function initYelp(){
     });
 }
 
-//initYelp('food');
+function newSearch(){
+    console.log('button clicked');
+    searchTerm = document.getElementById('searchTerm').value;
+    console.log(searchTerm);
+    initYelp(searchTerm);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

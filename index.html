@@ -12,11 +12,15 @@
 	<link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body class="container">
-	<h2 class="all">Restaurants</h2>
+	<h2 class="all text-center">Restaurants in Sedona</h2>
 	<div>
-		<div id="list" class="half">Search</div>
+		<div>Search for:</div>
+		<input type="text" id="searchTerm" value="Food">
+		<input type="submit" name="searchButton" value="search" onclick="newSearch();">
+		<div id="list" class="half">Filter:</div>
+
 		<input  data-bind='value: placeName'>
-		<span data-bind='text: placeName'></span>
+		<!-- <span data-bind='text: placeName'></span> -->
 
 		<ul class="half" data-bind='foreach: kopins'>
 			<li data-bind='visible: isVisible, text: name, click: $root.listClick'></li>
