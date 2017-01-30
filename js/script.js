@@ -95,7 +95,7 @@ function initMap() {
             // stops the bouncing after 2 seconds
             setTimeout(function() {
                 self.setAnimation(null);
-            }, 2000);
+            }, 2100);
         });
 
         // adds the marker created above to the rest of the pin data
