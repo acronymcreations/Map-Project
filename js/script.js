@@ -13,7 +13,7 @@ function ViewModel(){
 	self.kopins = ko.observableArray(pins);
 
     // observable that monitors filtering of data
-	self.placeName = ko.observable(' ');
+	self.placeName = ko.observable('');
 
     // observable that handles error messages
     self.errorMessage = ko.observable(errorMessage);
@@ -57,7 +57,7 @@ function ViewModel(){
 }
 
 // Object that holds all data required for one pin in the map.
-function pin(name,lat,long,image,url,rating_img,snip){
+function Pin(name,lat,long,image,url,rating_img,snip){
     var self = this;
     self.name = name;
     self.lat = lat;
@@ -105,6 +105,7 @@ function initMap() {
             // opens the info window
             infoWindow.setContent(self.content);
             infoWindow.open(map, self);
+            map.panTo(self.position);
             // animates the pin with bouncing affect
             self.setAnimation(google.maps.Animation.BOUNCE);
             // stops the bouncing after 2 seconds
@@ -203,7 +204,7 @@ function initYelp(){
             var url = item.mobile_url;
             var rating_img = item.rating_img_url;
             var snip = item.snippet_text;
-            pins.push(new pin(name,lat,long,image,url,rating_img,snip));
+            pins.push(new Pin(name,lat,long,image,url,rating_img,snip));
         }
         // calls the map method that places all the pins on the map
         initMap();

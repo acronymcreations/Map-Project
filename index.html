@@ -2,12 +2,8 @@
 <html>
 <head>
 	<title>Map Project</title>
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script type="text/javascript" src="js/OAuth.js"></script>
-    <script type="text/javascript" src="js/OAuth-SHA1.js"></script>
-    <script type="text/javascript" src="js/knockout-3.4.1.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" type="text/css" href="styles.css">
+	<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 	<header class="container">
@@ -36,6 +32,10 @@
 	<!-- div section to hold the actual map -->
 	<section id="map" class="all"></section>
 	<!-- js that actually calls the map and starts the whole process -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="js/OAuth.js"></script>
+    <script src="js/OAuth-SHA1.js"></script>
+    <script src="js/knockout-3.4.1.js"></script>
 	<script type="text/javascript" src="js/script.js"></script>
 	<script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDvOpXVTSzCjsIxg96PG9txSxQoI1ObAg&callback=initYelp" onerror="mapError()">
