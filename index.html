@@ -12,16 +12,16 @@
 <body>
 	<header class="container">
 		<!-- Creates the menu button that is used to open the slideout menu -->
-		<span class="quarter" onclick="openMenu()"><img class="menu-icon" src="img/menu-icon.png" width="40" height="40"></span>
+		<span class="quarter" data-bind="click: openMenu"><img class="menu-icon" src="img/menu-icon.png" width="40" height="40"></span>
 		<h1 class="half text-center">Restaurants in Sedona</h1>
 		<!-- Space set aside for potential error messages. If no errors occur, space is left empty -->
 		<span class="quarter error-message" data-bind='text: errorMessage'></span>
 	</header>
 	
 	<!-- Creates the sideout menu -->
-	<section class="side-menu" id="side-menu">
+	<section class="side-menu" id="side-menu" data-bind="css: {'side-menu-toggle': showMenu}">
 		<!-- Creates the close menu button -->
-		<a href="javascript:void(0)" class="close-btn" onclick="closeMenu()">&times;</a>
+		<span class="close-btn" data-bind="click: closeMenu">&times;</span>
 		<div class="search-inputs">
 			<!-- Filter box used for filtering the search contents -->
 			<div id="list" class="half">Filter:</div>

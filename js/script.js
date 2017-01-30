@@ -22,7 +22,10 @@ function ViewModel(){
 	self.listClick = function(location){
 		console.log(location);
 		google.maps.event.trigger(location.marker,'click');
+        self.showMenu(false);
 	}
+
+    self.showMenu = ko.observable(false);
 
     // Handles filtering the data whenever 'placeNames' value changes
 	self.filter = ko.computed(function(){
@@ -39,6 +42,18 @@ function ViewModel(){
 			}
 		}
 	},this);
+
+    // Opens the slideout menu
+    self.openMenu = function() {
+        console.log('Open Menu');
+        self.showMenu(true);
+    }
+
+    // closes the slideout menu
+    self.closeMenu = function() {
+        console.log('Close Menu');
+        self.showMenu(false);
+    }
 }
 
 // Object that holds all data required for one pin in the map.
@@ -204,16 +219,6 @@ function initYelp(){
 // Required callback method called when yelp api finishes
 function yelpCallBack(data){
     console.log(data);
-}
-
-// Opens the slideout menu
-function openMenu() {
-    document.getElementById("side-menu").style.width = "250px";
-}
-
-// closes the slideout menu
-function closeMenu() {
-    document.getElementById("side-menu").style.width = "0";
 }
 
 function mapError(){
